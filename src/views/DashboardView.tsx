@@ -1,8 +1,8 @@
-import { useTheme } from "../context"
+// import { useTheme } from "../context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components"
 
 export const DashboardView = () => {
-  const { isDark } = useTheme()
+  // const { isDark } = useTheme()
 
   const stats = [
     { label: "Conversaciones", value: "1,234", icon: "bi-chat-dots", color: "blue", trend: "+12.5%" },

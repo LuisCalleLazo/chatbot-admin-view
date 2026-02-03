@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { useTheme } from "../../../context"
+// import { useTheme } from "../../../context"
 import { Button, Input, Textarea, Select, Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../../components"
 
 export const AdminSettingsBusinessView = () => {
-  const { isDark } = useTheme()
+  // const { isDark } = useTheme()
   const [businessType, setBusinessType] = useState("restaurant")
   const [businessName, setBusinessName] = useState("Mi Negocio")
   const [businessPhone, setBusinessPhone] = useState("+56 9 12345678")

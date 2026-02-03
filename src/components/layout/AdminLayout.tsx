@@ -72,7 +72,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
   const sidebarBg = isDark ? 'bg-blue-900' : 'bg-blue-800'
   const sidebarBgDark = isDark ? 'bg-blue-950' : 'bg-blue-900'
   const headerBg = isDark ? 'bg-gray-800' : 'bg-white'
-  const textColor = isDark ? 'text-gray-100' : 'text-gray-900'
+  // const textColor = isDark ? 'text-gray-100' : 'text-gray-900'
   const borderColor = isDark ? 'border-gray-700' : 'border-gray-200'
   const hoverBg = isDark ? 'hover:bg-blue-700' : 'hover:bg-blue-700'
   const activeMenuBg = isDark ? 'bg-blue-700' : 'bg-blue-700'
