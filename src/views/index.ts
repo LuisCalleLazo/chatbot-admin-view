@@ -8,3 +8,9 @@ export * from "./admin/chatbot/AdminChatbotStatesView";
 export * from "./admin/settings/AdminSettingsBusinessView";
 
 export * from "./NotFoundView";
+
+export * from "./home/HomeView";
+export * from "./home/ContactView";
+export * from "./home/ServiceView";
+export * from "./home/CharacteristicsView";
+export * from "./home/PricesView";
