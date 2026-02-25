@@ -35,8 +35,8 @@ export const HomeLayout = ({ children }: HomeLayoutProps) => {
                 height={40}
                 className="h-10 w-10"
               />
-              <h1 className="text-2xl font-bold hidden sm:inline">ChatBot Pro</h1>
-              <h1 className="text-xl font-bold sm:hidden">ChatBot</h1>
+              <h1 className="text-2xl font-bold hidden sm:inline">ChatBot Business</h1>
+              <h1 className="text-xl font-bold sm:hidden">ChatBot Business</h1>
             </div>
 
             {/* Navegación y botones - Desktop */}
@@ -56,10 +56,14 @@ export const HomeLayout = ({ children }: HomeLayoutProps) => {
               <button onClick={() => navigate("/prices")} className="text-sm lg:text-base hover:text-blue-100 transition-colors">
                 Precios
               </button>
-              <button className="px-3 lg:px-4 py-2 bg-white text-blue-600 rounded-md hover:bg-blue-50 transition-colors text-sm lg:text-base font-medium">
+              <button 
+                className="px-3 lg:px-4 py-2 bg-white text-blue-600 rounded-md hover:bg-blue-50 transition-colors text-sm lg:text-base font-medium"
+                onClick={() => navigate("/auth/login")}>
                 Iniciar Sesión
               </button>
-              <button className="px-3 lg:px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm lg:text-base font-medium">
+              <button 
+                className="px-3 lg:px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm lg:text-base font-medium"
+                onClick={() => navigate("/auth/register")}>
                 Registrarse
               </button>
             </nav>
@@ -94,10 +98,14 @@ export const HomeLayout = ({ children }: HomeLayoutProps) => {
                 Precios
               </button>
               <div className="flex gap-2 pt-2">
-                <button className="flex-1 px-3 py-2 bg-white text-blue-600 rounded-md hover:bg-blue-50 transition-colors text-sm font-medium">
+                <button 
+                  className="flex-1 px-3 py-2 bg-white text-blue-600 rounded-md hover:bg-blue-50 transition-colors text-sm font-medium"
+                  onClick={() => navigate("/auth/login")}>
                   Iniciar Sesión
                 </button>
-                <button className="flex-1 px-3 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm font-medium">
+                <button 
+                  className="flex-1 px-3 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm font-medium"
+                  onClick={() => navigate("/auth/register")}>
                   Registrarse
                 </button>
               </div>

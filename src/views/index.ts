@@ -14,3 +14,6 @@ export * from "./home/ContactView";
 export * from "./home/ServiceView";
 export * from "./home/CharacteristicsView";
 export * from "./home/PricesView";
+
+export * from "./auth/LoginView";
+export * from "./auth/RegisterView";
