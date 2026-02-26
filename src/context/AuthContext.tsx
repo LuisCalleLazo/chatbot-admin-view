@@ -1,10 +1,11 @@
 import React, { createContext, useState, useEffect, useContext, type ReactNode } from 'react';
-import { loginServ, googleLoginService, refreshTokenService } from '../services';
+import { loginServ, refreshTokenService } from '../services';
 import type { LoginData, AuthContextType, UserAuthResponse, DecodedToken, LoginResponse } from '../interfaces/IAuth';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
 import { executeAsyncAction } from '../utils';
+import type { Response } from '../interfaces/IResponse';
 interface Props {
   children: ReactNode;
 }
@@ -24,7 +25,6 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
   const [worker, setWorker] = useState<string>('none'); 
   const [customer, setCustomer] = useState<string>('none');
 
-  // const [rols, setRols] = useState<number[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true); 
   const [init, setInit] = useState<boolean>(false); 
@@ -76,13 +76,13 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
     try {
       
     setLoading(true);
-    executeAsyncAction<LoginResponse>({
+    executeAsyncAction<Response<LoginResponse>>({
       asyncFunction: async () => await loginServ(loginData),
       successAction: (data) => {
-        setUser(data.user);
+        setUser(data.data.user);
         setIsAuthenticated(true);
         toast.success("Inicio de session correcto");
-        navigateAccess(data.currentToken)
+        navigateAccess(data.data.currentToken)
       },
       finalAction: () => setLoading(false),
     });
@@ -94,20 +94,6 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
   };
 
   
-  const loginGoogle = async (token : string) => {
-    try {
-      const data = await googleLoginService(token);
-      setUser(data.user);
-      setIsAuthenticated(true);
-
-      toast.success("Inicio de session correcto");
-      navigateAccess(data.currentToken)
-
-    } catch (error) {
-      toast.error("Credenciales incorrectas");
-      console.error('Login failed:', error);
-    }
-  }; 
   const navigateAccess = (token : string) =>
   {
     const decodedToken = jwtDecode<DecodedToken>(token);
@@ -150,9 +136,18 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ 
-        isAuthenticated, loading, user, init, setUser,
-        admin, rols : [], worker, customer,
-        login, loginGoogle, logout, refreshToken 
+        isAuthenticated, 
+        loading, 
+        user, 
+        init, 
+        setUser,
+        admin, 
+        rols : [], 
+        worker, 
+        customer,
+        login,
+        logout, 
+        refreshToken 
     }}>
       {children}
     </AuthContext.Provider>

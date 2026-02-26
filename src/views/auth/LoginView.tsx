@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../context';
 
 export const LoginView = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ export const LoginView = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const { login } = useAuth();
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -50,22 +52,12 @@ export const LoginView = () => {
     }
 
     setIsLoading(true);
-    setSuccessMessage('');
 
     try {
-      // Aquí irá la lógica de login
-      console.log('Login attempt with:', formData);
-
-      // Simulamos un delay de servidor
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await login({nameOrGmail: formData.email, password: formData.password});
 
       setSuccessMessage('Inicio de sesión exitoso! Redirigiendo...');
-      setFormData({ email: '', password: '' });
 
-      // Aquí irá la redirección al dashboard
-      setTimeout(() => {
-        // window.location.href = '/dashboard';
-      }, 2000);
     } catch (error) {
       console.error('Login error:', error);
     } finally {

@@ -1,5 +1,5 @@
-import type { LoginResponse, RefresTokenData } from "../interfaces/IAuth";
-import { basicApi } from "./api";
+import type { LoginResponse, RefresTokenData } from "../../interfaces/IAuth";
+import { authApi } from "../api";
 
 
 export const refreshTokenService = async (refresh : RefresTokenData): Promise<LoginResponse> => 
@@ -7,7 +7,7 @@ export const refreshTokenService = async (refresh : RefresTokenData): Promise<Lo
     try
     {
       console.log(refresh);
-      const response = await basicApi.post<LoginResponse>('v1/auth/refresh-token', refresh);
+      const response = await authApi.post<LoginResponse>('v1/auth/refresh-token', refresh);
       console.log(response.data);
       localStorage.setItem('token', response.data.currentToken);
       localStorage.setItem('refreshToken', response.data.refreshToken);

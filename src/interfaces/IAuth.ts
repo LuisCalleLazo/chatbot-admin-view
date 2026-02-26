@@ -10,12 +10,6 @@ export interface UserAuthResponse
   id : number;
   name : string;
   email : string;
-  photo : string;
-  firstName : string;
-  dadLastName : string;
-  momLastName : string;
-  age : number;
-  ci : string;
 }
 
 export interface RefresTokenData
@@ -40,7 +34,6 @@ export interface AuthContextType {
   customer : string;
   rols : number [];
   login: (loginData: LoginData) => Promise<void>;
-  loginGoogle: (token : string) => Promise<void>;
   logout: () => void;
   refreshToken: () => Promise<void>;
 }

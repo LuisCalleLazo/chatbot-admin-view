@@ -1,15 +1,15 @@
-import { useEffect, type ReactNode } from 'react'
-import { Button } from './Button'
+import { useEffect, type ReactNode } from "react";
+import { Button } from "../button/Button";
 
 interface ModalProps {
-  isOpen: boolean
-  onClose: () => void
-  title?: string
-  description?: string
-  children: ReactNode
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
-  showCloseButton?: boolean
-  footer?: ReactNode
+  isOpen: boolean;
+  onClose: () => void;
+  title?: string;
+  description?: string;
+  children: ReactNode;
+  size?: "sm" | "md" | "lg" | "xl" | "full";
+  showCloseButton?: boolean;
+  footer?: ReactNode;
 }
 
 export const Modal = ({
@@ -18,30 +18,30 @@ export const Modal = ({
   title,
   description,
   children,
-  size = 'md',
+  size = "md",
   showCloseButton = true,
   footer,
 }: ModalProps) => {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isOpen])
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   const sizeClasses = {
-    sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
-    full: 'max-w-7xl',
-  }
+    sm: "max-w-md",
+    md: "max-w-lg",
+    lg: "max-w-2xl",
+    xl: "max-w-4xl",
+    full: "max-w-7xl",
+  };
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -97,19 +97,19 @@ export const Modal = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface ConfirmDialogProps {
-  isOpen: boolean
-  onClose: () => void
-  onConfirm: () => void
-  title: string
-  description: string
-  confirmText?: string
-  cancelText?: string
-  variant?: 'danger' | 'primary'
-  loading?: boolean
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+  confirmText?: string;
+  cancelText?: string;
+  variant?: "danger" | "primary";
+  loading?: boolean;
 }
 
 export const ConfirmDialog = ({
@@ -118,9 +118,9 @@ export const ConfirmDialog = ({
   onConfirm,
   title,
   description,
-  confirmText = 'Confirmar',
-  cancelText = 'Cancelar',
-  variant = 'primary',
+  confirmText = "Confirmar",
+  cancelText = "Cancelar",
+  variant = "primary",
   loading = false,
 }: ConfirmDialogProps) => {
   return (
@@ -145,5 +145,5 @@ export const ConfirmDialog = ({
         <p className="text-slate-700 dark:text-slate-300">{description}</p>
       </div>
     </Modal>
-  )
-}
+  );
+};
