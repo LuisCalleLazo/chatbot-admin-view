@@ -3,13 +3,14 @@ import { Routes, Route } from "react-router-dom";
 import { AdminRouter, AuthRouter, HomeRouter } from "./routes";
 import { ToastContainer } from "react-toastify";
 import LoadingModal from "./components/loading/LoadingModal";
+import { PrivateAdminRoute } from "./components/redirect/PrivateRoute";
 
 function App() {
 
   return (
     <>
       <Routes>
-        <Route path="/admin/*" element={<AdminRouter />} />
+        <Route path="/admin/*" element={<PrivateAdminRoute element={<AdminRouter />}/> } />
         <Route path="/auth/*" element={<AuthRouter />} />
         <Route path="/*" element={<HomeRouter/>} />
       </Routes>

@@ -7,8 +7,8 @@ import {
   AdminChatbotStatesView, 
   AdminSettingsBusinessView, 
   DashboardView,
-  NotFoundView
 } from "../views"
+import { RedirectorAdmin } from "../components/redirect/AdminRedirect"
 
 export const AdminRouter = () => {
   return (
@@ -28,7 +28,7 @@ export const AdminRouter = () => {
 
 
 
-        <Route path="*" element={<NotFoundView />} />
+        <Route path="/*" element={<RedirectorAdmin />} />
       </Routes>
     </AdminLayout>
   )
