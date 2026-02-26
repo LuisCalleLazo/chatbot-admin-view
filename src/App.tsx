@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <Routes>
+      <Routes>  
         <Route path="/admin/*" element={<PrivateAdminRoute element={<AdminRouter />}/> } />
         <Route path="/auth/*" element={<AuthRouter />} />
         <Route path="/*" element={<HomeRouter/>} />
