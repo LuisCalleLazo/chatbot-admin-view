@@ -3,122 +3,335 @@ export const ServiceView = () => {
     {
       id: 1,
       title: 'WhatsApp Business Bot',
-      description: 'Automatiza respuestas en WhatsApp Business. Gestiona consultas, pedidos y atención al cliente desde un único dashboard.',
+      description:
+        'Automatiza respuestas en WhatsApp Business. Gestiona consultas, pedidos y atención al cliente desde un único dashboard centralizado.',
       features: ['Respuestas instantáneas', 'Etiquetado de contactos', 'Plantillas personalizadas'],
-      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo_chatbot-removebg-preview-TeG2K5KMKRbC2PCaHTzbelk6aJ8cK2.png',
-      color: 'from-blue-100 to-blue-50',
+      emoji: '💬',
+      accent: '#25d366',
+      bg: 'rgba(37,211,102,0.08)',
+      border: 'rgba(37,211,102,0.2)',
     },
     {
       id: 2,
       title: 'Telegram Bot',
-      description: 'Crea bots inteligentes para Telegram. Notificaciones automáticas, encuestas y interacciones personalizadas con tus usuarios.',
-      features: ['Bots inteligentes', 'Notificaciones', 'Análisis en tiempo real'],
-      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo_chatbot-removebg-preview-TeG2K5KMKRbC2PCaHTzbelk6aJ8cK2.png',
-      color: 'from-teal-100 to-teal-50',
+      description:
+        'Crea bots inteligentes para Telegram. Notificaciones automáticas, encuestas y interacciones personalizadas con tus usuarios.',
+      features: ['Bots inteligentes', 'Notificaciones push', 'Análisis en tiempo real'],
+      emoji: '✈️',
+      accent: '#2aabee',
+      bg: 'rgba(42,171,238,0.08)',
+      border: 'rgba(42,171,238,0.2)',
     },
     {
       id: 3,
       title: 'Facebook Messenger Bot',
-      description: 'Conecta tu página de Facebook con bots automáticos. Aumenta el engagement y convierte visitas en clientes.',
+      description:
+        'Conecta tu página de Facebook con bots automáticos. Aumenta el engagement y convierte visitas en clientes fieles.',
       features: ['Automatización completa', 'Integración con catálogo', 'Reportes detallados'],
-      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo_chatbot-removebg-preview-TeG2K5KMKRbC2PCaHTzbelk6aJ8cK2.png',
-      color: 'from-orange-100 to-orange-50',
+      emoji: '💙',
+      accent: '#0866ff',
+      bg: 'rgba(8,102,255,0.08)',
+      border: 'rgba(8,102,255,0.2)',
     },
   ];
 
+  const extras = [
+    { icon: '📊', title: 'Dashboard intuitivo', desc: 'Gestiona todos tus bots desde un único panel' },
+    { icon: '🔄', title: 'Integración fácil', desc: 'Conecta en minutos sin conocimientos técnicos' },
+    { icon: '📈', title: 'Análisis detallados', desc: 'Reportes en tiempo real sobre rendimiento' },
+    { icon: '🛠️', title: 'Personalización total', desc: 'Adapta cada bot a tus necesidades específicas' },
+    { icon: '👥', title: 'Soporte 24/7', desc: 'Equipo de expertos siempre disponible' },
+    { icon: '🔐', title: 'Seguridad garantizada', desc: 'Encriptación y cumplimiento normativo' },
+  ];
+
   return (
-    <div className="space-y-12 sm:space-y-16 lg:space-y-20">
-      {/* Título de la sección */}
-      <section className="container mx-auto px-4 pt-12 sm:pt-16 lg:pt-20">
-        <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 text-center mb-4">
-          Nuestros Servicios
-        </h2>
-        <p className="text-lg sm:text-xl text-slate-600 text-center max-w-2xl mx-auto">
-          Soluciones completas de chatbot para cada plataforma de mensajería
-        </p>
-      </section>
+    <div style={{ background: '#0f172a', minHeight: '100vh' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+        .service-card:hover { transform: translateY(-4px); }
+        .extra-card:hover { border-color: rgba(56,189,248,0.35) !important; transform: translateY(-3px); }
+      `}</style>
 
-      {/* Servicios */}
-      <section id="services" className="container mx-auto px-4">
-        <div className="space-y-8 sm:space-y-12">
-          {services.map((service, index) => (
-            <div
-              key={service.id}
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center ${
-                index % 2 === 1 ? 'lg:grid-flow-dense' : ''
-              }`}
-            >
-              {/* Imagen */}
-              <div
-                className={`flex justify-center ${index % 2 === 1 ? 'lg:order-2' : ''}`}
-              >
-                <div
-                  className={`relative w-full max-w-sm h-72 sm:h-80 ${service.color} rounded-2xl flex items-center justify-center overflow-hidden shadow-lg hover:shadow-xl transition-shadow`}
-                >
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    width={280}
-                    height={280}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Contenido */}
-              <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
-                <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-                  {service.title}
-                </h3>
-                <p className="text-lg text-slate-600 mb-6">
-                  {service.description}
-                </p>
-
-                {/* Features */}
-                <div className="space-y-3 mb-8">
-                  <h4 className="font-semibold text-slate-900">Características principales:</h4>
-                  <ul className="space-y-2">
-                    {service.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center gap-3 text-slate-600">
-                        <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <button className="px-6 sm:px-8 py-3 from-blue-600 to-teal-600 text-white rounded-lg hover:shadow-lg transition-shadow font-semibold">
-                  Conocer más
-                </button>
-              </div>
-            </div>
-          ))}
+      {/* Header */}
+      <section
+        style={{
+          paddingTop: '100px',
+          paddingBottom: '60px',
+          textAlign: 'center',
+          borderBottom: '1px solid rgba(56,189,248,0.08)',
+        }}
+      >
+        <div className="container mx-auto px-6">
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              color: '#38bdf8',
+              fontWeight: 600,
+              fontSize: '13px',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              marginBottom: '14px',
+            }}
+          >
+            Lo que ofrecemos
+          </p>
+          <h2
+            style={{
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 'clamp(2.2rem, 5vw, 4rem)',
+              fontWeight: 800,
+              color: '#f8fafc',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.1,
+              marginBottom: '20px',
+            }}
+          >
+            Nuestros Servicios
+          </h2>
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '1.1rem',
+              color: '#64748b',
+              maxWidth: '520px',
+              margin: '0 auto',
+              lineHeight: 1.7,
+            }}
+          >
+            Soluciones completas de chatbot para cada plataforma de mensajería
+          </p>
         </div>
       </section>
 
-      {/* Sección de ventajas adicionales */}
-      <section className="from-blue-50 to-teal-50 py-12 sm:py-16 lg:py-20">
-        <div className="container mx-auto px-4">
-          <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 text-center mb-12">
-            Lo que incluye cada servicio
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {[
-              { icon: '📊', title: 'Dashboard intuitivo', desc: 'Gestiona todos tus bots desde un único panel' },
-              { icon: '🔄', title: 'Integración fácil', desc: 'Conecta en minutos sin conocimientos técnicos' },
-              { icon: '📈', title: 'Análisis detallados', desc: 'Reportes en tiempo real sobre rendimiento' },
-              { icon: '🛠️', title: 'Personalización', desc: 'Adapta cada bot a tus necesidades específicas' },
-              { icon: '👥', title: 'Soporte 24/7', desc: 'Equipo de expertos siempre disponible' },
-              { icon: '🔐', title: 'Seguridad garantizada', desc: 'Encriptación y cumplimiento normativo' },
-            ].map((item, index) => (
+      {/* Services */}
+      <section id="services" style={{ padding: '80px 0' }}>
+        <div className="container mx-auto px-6 lg:px-16">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            {services.map((service, index) => (
               <div
-                key={index}
-                className="bg-white p-6 sm:p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+                key={service.id}
+                className="service-card"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                  gap: '0',
+                  background: 'rgba(30,41,59,0.5)',
+                  border: `1px solid ${service.border}`,
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                  transition: 'transform 0.3s',
+                }}
               >
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h4 className="text-lg font-semibold text-slate-900 mb-2">{item.title}</h4>
-                <p className="text-slate-600 text-sm">{item.desc}</p>
+                {/* Visual panel */}
+                <div
+                  style={{
+                    background: service.bg,
+                    padding: '48px 40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    order: index % 2 === 1 ? 2 : 1,
+                    minHeight: '280px',
+                    borderRight: index % 2 !== 1 ? `1px solid ${service.border}` : 'none',
+                    borderLeft: index % 2 === 1 ? `1px solid ${service.border}` : 'none',
+                  }}
+                >
+                  <div style={{ textAlign: 'center' }}>
+                    <div
+                      style={{
+                        fontSize: '80px',
+                        marginBottom: '16px',
+                        filter: 'drop-shadow(0 0 30px currentColor)',
+                      }}
+                    >
+                      {service.emoji}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        color: service.accent,
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {service.title.split(' ')[0]}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content panel */}
+                <div
+                  style={{
+                    padding: '48px 40px',
+                    order: index % 2 === 1 ? 1 : 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontFamily: "'Syne', sans-serif",
+                      fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+                      fontWeight: 800,
+                      color: '#f1f5f9',
+                      marginBottom: '16px',
+                      letterSpacing: '-0.02em',
+                    }}
+                  >
+                    {service.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: '15px',
+                      color: '#64748b',
+                      lineHeight: 1.75,
+                      marginBottom: '28px',
+                    }}
+                  >
+                    {service.description}
+                  </p>
+
+                  <div style={{ marginBottom: '32px' }}>
+                    {service.features.map((f) => (
+                      <div
+                        key={f}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          marginBottom: '10px',
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: '20px',
+                            height: '20px',
+                            borderRadius: '50%',
+                            background: service.bg,
+                            border: `1px solid ${service.accent}60`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '11px',
+                            color: service.accent,
+                            flexShrink: 0,
+                          }}
+                        >
+                          ✓
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: "'DM Sans', sans-serif",
+                            fontSize: '14px',
+                            color: '#cbd5e1',
+                            fontWeight: 500,
+                          }}
+                        >
+                          {f}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    style={{
+                      alignSelf: 'flex-start',
+                      padding: '12px 28px',
+                      background: service.bg,
+                      border: `1.5px solid ${service.accent}50`,
+                      color: service.accent,
+                      borderRadius: '10px',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s',
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = `${service.accent}20`;
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = service.bg;
+                    }}
+                  >
+                    Conocer más →
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Extras grid */}
+      <section
+        style={{
+          padding: '80px 0 100px',
+          borderTop: '1px solid rgba(56,189,248,0.08)',
+        }}
+      >
+        <div className="container mx-auto px-6 lg:px-16">
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <h3
+              style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+                fontWeight: 800,
+                color: '#f1f5f9',
+                letterSpacing: '-0.02em',
+              }}
+            >
+              Lo que incluye cada servicio
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: '20px' }}>
+            {extras.map((item) => (
+              <div
+                key={item.title}
+                className="extra-card"
+                style={{
+                  background: 'rgba(30,41,59,0.5)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: '18px',
+                  padding: '28px',
+                  transition: 'transform 0.25s, border-color 0.25s',
+                  cursor: 'default',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '32px',
+                    marginBottom: '14px',
+                  }}
+                >
+                  {item.icon}
+                </div>
+                <h4
+                  style={{
+                    fontFamily: "'Syne', sans-serif",
+                    fontSize: '1.05rem',
+                    fontWeight: 700,
+                    color: '#f1f5f9',
+                    marginBottom: '8px',
+                  }}
+                >
+                  {item.title}
+                </h4>
+                <p
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: '14px',
+                    color: '#64748b',
+                    lineHeight: 1.65,
+                  }}
+                >
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
