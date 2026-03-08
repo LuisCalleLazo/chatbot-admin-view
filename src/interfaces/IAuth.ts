@@ -30,8 +30,6 @@ export interface AuthContextType {
   setUser: (user : UserAuthResponse) => void
   user: UserAuthResponse;
   admin : string;
-  worker : string;
-  customer : string;
   rols : number [];
   login: (loginData: LoginData) => Promise<void>;
   logout: () => void;
@@ -76,7 +74,5 @@ export interface PermissionDetail
 
 export interface DecodedToken {
   exp: number;
-  admin: string;
-  worker: string;
-  customer: string;
+  roles: string;
 }

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { getEnv } from '../utils';
 
-const { VITE_HOST_BACKEND, VITE_AUTH_API } = getEnv();
+const { VITE_CHATBOT_API, VITE_AUTH_API } = getEnv();
 
 export const authApi = axios.create({
-  baseURL: `${VITE_AUTH_API}/api/`,
+  baseURL: `${VITE_AUTH_API}/`,
 });
 
-export const basicApi = axios.create({
-  baseURL: `${VITE_HOST_BACKEND}/api/`,
+export const chatbotApi = axios.create({
+  baseURL: `${VITE_CHATBOT_API}/`,
 });

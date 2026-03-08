@@ -22,8 +22,6 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const [admin, setAdmin] =  useState<string>('none');
-  const [worker, setWorker] = useState<string>('none'); 
-  const [customer, setCustomer] = useState<string>('none');
 
 
   const [loading, setLoading] = useState<boolean>(true); 
@@ -39,20 +37,13 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
 
       if (token && refreshToken && storedUser) {
         try {
-          // OBTENIENDO TODOS LOS DATOS RELEVANTES DEL TOKEN
-          // let rolesString = jwtDecode<{ rols: string }>(token).rols;
-          // let rolesArray: number[] = rolesString.split(",").map(Number);
-          // setRols(rolesArray);
-
           const decodedToken = jwtDecode<DecodedToken>(token);
           const currentTime = Date.now() / 1000;
           
           if (decodedToken.exp > currentTime) 
           {
             
-            setAdmin(decodedToken.admin);
-            setWorker(decodedToken.worker);
-            setCustomer(decodedToken.customer);
+            setAdmin(decodedToken.roles);
 
             setIsAuthenticated(true);
             setUser(JSON.parse(storedUser));
@@ -98,14 +89,10 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
   {
     const decodedToken = jwtDecode<DecodedToken>(token);
     
-    if (decodedToken.admin == 'true') {
+    if (decodedToken.roles == 'Admin') {
       navigate('/admin');
-    } else if (decodedToken.worker == 'true') {
-      navigate('/worker');
-    } else if (decodedToken.customer == 'true') {
-      navigate('/customer');
-    }else{
-      navigate('/register')
+    } else{
+      navigate('/auth/register')
     }
   }
 
@@ -113,8 +100,6 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
     localStorage.clear();
     setUser(userDefault);
     setAdmin('none');
-    setWorker('none');
-    setCustomer('none');
     setIsAuthenticated(false);
     navigate('/login');
   };
@@ -142,9 +127,7 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
         init, 
         setUser,
         admin, 
-        rols : [], 
-        worker, 
-        customer,
+        rols : [],
         login,
         logout, 
         refreshToken 
