@@ -45,10 +45,6 @@ export const AdminChatbotQuestionsView = () => {
     { id: 'confirmed', label: 'Confirmado', color: 'from-emerald-500 to-emerald-600' },
   ]
 
-  const cardBg = isDark ? 'bg-slate-800/50 backdrop-blur-sm' : 'bg-white/80 backdrop-blur-sm'
-  const cardBorder = isDark ? 'border-slate-700/50' : 'border-gray-200/50'
-  const inputBg = isDark ? 'bg-slate-700 text-white' : 'bg-white text-gray-900'
-  const inputBorder = isDark ? 'border-slate-600' : 'border-gray-300'
   const textPrimary = isDark ? 'text-slate-50' : 'text-gray-900'
   const textSecondary = isDark ? 'text-slate-400' : 'text-gray-600'
 
@@ -105,7 +101,8 @@ export const AdminChatbotQuestionsView = () => {
   }
 
   const handleSaveEdit = async (id: number) => {
-    const options = editQuestionOptions.filter((opt) => opt.trim() !== '')
+    console.log(id);
+    // const options = editQuestionOptions.filter((opt) => opt.trim() !== '')
     // Aquí podrías llamar a handleUpdateQuestion si lo implementas
     handleCancelEdit()
   }

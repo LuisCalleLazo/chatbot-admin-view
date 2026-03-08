@@ -1,8 +1,10 @@
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input } from "../../../components"
 import { useChatbotSettings } from "../../../hooks/chatbot/useChatbotSettings"
+import { useState } from "react"
 
 export const ChatbotSettingsView = () => {
   const { settings, loading, saving, handleFieldChange, saveSettings } = useChatbotSettings()
+  const [showWebhookInfo, setShowWebhookInfo] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,7 +46,7 @@ export const ChatbotSettingsView = () => {
                 label="WhatsApp API URL"
                 value={settings.whatsappApiUrl}
                 onChange={(e) => handleFieldChange("whatsappApiUrl", e.target.value)}
-                placeholder="https://graph.facebook.com/v19.0/..."
+                placeholder="https://graph.facebook.com/v19.0/ ..."
                 leftIcon={<i className="bi bi-link-45deg text-lg"></i>}
                 fullWidth
                 disabled={loading}
@@ -71,6 +73,83 @@ export const ChatbotSettingsView = () => {
                 fullWidth
                 disabled={loading}
               />
+            </div>
+
+            {/* Sección de Webhook URL - Solo visible cuando se desbloquea */}
+            <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                    Información del Webhook
+                  </h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Datos necesarios para configurar el webhook en Meta
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowWebhookInfo(!showWebhookInfo)}
+                  className={`
+                    relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                    ${showWebhookInfo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'}
+                  `}
+                >
+                  <span
+                    className={`
+                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200
+                      ${showWebhookInfo ? 'translate-x-6' : 'translate-x-1'}
+                    `}
+                  />
+                </button>
+              </div>
+
+              {showWebhookInfo && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      URL del Webhook
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        readOnly
+                        value="https://chatbot-business.duckdns.org/api/webhook/2"
+                        className="w-full px-3 py-2 pr-10 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 font-mono text-sm"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => navigator.clipboard.writeText("https://chatbot-business.duckdns.org/api/webhook/2")}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+                        title="Copiar URL"
+                      >
+                        <i className="bi bi-clipboard text-lg"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      Token de Verificación
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        readOnly
+                        value="4TD9PcUjUeVpUcMiFSzVBxkEjlZH7Mwlw5jCLUb7AjODuI04iGMIyAV8O4wQJEZR"
+                        className="w-full px-3 py-2 pr-10 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 font-mono text-sm"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => navigator.clipboard.writeText("4TD9PcUjUeVpUcMiFSzVBxkEjlZH7Mwlw5jCLUb7AjODuI04iGMIyAV8O4wQJEZR")}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+                        title="Copiar Token"
+                      >
+                        <i className="bi bi-clipboard text-lg"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
