@@ -47,6 +47,12 @@ export const menuOptions = [
         icon: "bi-building", // Icono de edificio/negocio
         href: "/admin/settings/business",
       },
+      {
+        id: "settings-chatbot",
+        label: "Chatbot",
+        icon: "bi bi-gear-fill", // Icono de edificio/negocio
+        href: "/admin/settings/chatbot",
+      },
     ],
   },
 ]

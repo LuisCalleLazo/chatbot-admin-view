@@ -9,6 +9,7 @@ import {
   DashboardView,
 } from "../views"
 import { RedirectorAdmin } from "../components/redirect/AdminRedirect"
+import { ChatbotSettingsView } from "../views/admin/settings/ChatbotSettingsView"
 
 export const AdminRouter = () => {
   return (
@@ -25,6 +26,7 @@ export const AdminRouter = () => {
 
         {/* Configuration */}
         <Route path="settings/business" element={<AdminSettingsBusinessView />} />
+        <Route path="settings/chatbot" element={<ChatbotSettingsView />} />
 
 
 

@@ -1,42 +1,63 @@
 // import { useTheme } from "../context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components"
+import { useDashboard } from "../hooks/chatbot/useDashboard"
 
-export const DashboardView = () => {
-  // const { isDark } = useTheme()
-
-  const stats = [
-    { label: "Conversaciones", value: "1,234", icon: "bi-chat-dots", color: "blue", trend: "+12.5%" },
-    { label: "Clientes", value: "567", icon: "bi-people", color: "green", trend: "+8.2%" },
-    { label: "Órdenes", value: "289", icon: "bi-bag-check", color: "purple", trend: "+23.1%" },
-    { label: "Ingresos", value: "$45,234", icon: "bi-currency-dollar", color: "orange", trend: "+15.3%" },
-  ]
-
-  const recentConversations = [
-    { id: 1, phone: "+56 9 1234 5678", status: "Completado", time: "Hace 2 min", state: "confirmed" },
-    { id: 2, phone: "+56 9 8765 4321", status: "En proceso", time: "Hace 5 min", state: "ordering" },
-    { id: 3, phone: "+56 9 5678 9012", status: "Completado", time: "Hace 15 min", state: "confirmed" },
-    { id: 4, phone: "+56 9 3456 7890", status: "Pendiente", time: "Hace 30 min", state: "welcome" },
-    { id: 5, phone: "+56 9 2345 6789", status: "En proceso", time: "Hace 1 hora", state: "browsing_catalog" },
-  ]
-
-  const getColorClasses = (color: string) => {
+const getColorClasses = (color: string) => {
     const colors = {
       blue: 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400',
       green: 'bg-green-50 dark:bg-green-950/50 text-green-600 dark:text-green-400',
       purple: 'bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400',
       orange: 'bg-orange-50 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400',
-    }
-    return colors[color as keyof typeof colors]
   }
+  return colors[color as keyof typeof colors]
+}
 
-  const getStatusBadge = (status: string) => {
+const getStatusBadge = (status: string) => {
     const badges = {
       "Completado": "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
       "En proceso": "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400",
       "Pendiente": "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400",
     }
-    return badges[status as keyof typeof badges] || badges["Pendiente"]
-  }
+  return badges[status as keyof typeof badges] || badges["Pendiente"]
+}
+
+const formatBs = (amount: number) =>
+  new Intl.NumberFormat('es-BO', { style: 'currency', currency: 'BOB' }).format(amount)
+
+export const DashboardView = () => {
+  // const { isDark } = useTheme()
+  const { summary, loading } = useDashboard()
+
+  const stats = [
+    {
+      label: "Conversaciones",
+      value: summary.stats.conversations.toLocaleString('es-BO'),
+      icon: "bi-chat-dots",
+      color: "blue",
+      trend: `${summary.stats.conversationsChangePercent.toFixed(1)}%`,
+    },
+    {
+      label: "Clientes",
+      value: summary.stats.customers.toLocaleString('es-BO'),
+      icon: "bi-people",
+      color: "green",
+      trend: "", // Podrás agregar cambio porcentual cuando lo tengas en la API
+    },
+    {
+      label: "Órdenes",
+      value: summary.stats.orders.toLocaleString('es-BO'),
+      icon: "bi-bag-check",
+      color: "purple",
+      trend: "", // Igual que clientes
+    },
+    {
+      label: "Ingresos",
+      value: formatBs(summary.stats.revenueBs),
+      icon: "bi-currency-dollar",
+      color: "orange",
+      trend: `${summary.stats.revenueChangePercent.toFixed(1)}%`,
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -62,14 +83,16 @@ export const DashboardView = () => {
                 <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
                   {stat.value}
                 </p>
-                <div className="mt-2 flex items-center text-sm">
-                  <span className="text-green-600 dark:text-green-400 font-medium">
-                    {stat.trend}
-                  </span>
-                  <span className="ml-2 text-slate-500 dark:text-slate-500">
-                    vs mes anterior
-                  </span>
-                </div>
+                {stat.trend && (
+                  <div className="mt-2 flex items-center text-sm">
+                    <span className="text-green-600 dark:text-green-400 font-medium">
+                      {stat.trend}
+                    </span>
+                    <span className="ml-2 text-slate-500 dark:text-slate-500">
+                      vs mes anterior
+                    </span>
+                  </div>
+                )}
               </div>
               <div className={`p-3 rounded-xl ${getColorClasses(stat.color)}`}>
                 <i className={`bi ${stat.icon} text-2xl`}></i>
@@ -89,20 +112,15 @@ export const DashboardView = () => {
           </CardHeader>
           <CardContent>
             <div className="h-64 flex items-end gap-2">
-              {[
-                { day: 'Lun', value: 30 },
-                { day: 'Mar', value: 50 },
-                { day: 'Mié', value: 45 },
-                { day: 'Jue', value: 60 },
-                { day: 'Vie', value: 55 },
-                { day: 'Sáb', value: 70 },
-                { day: 'Dom', value: 65 },
-              ].map((item, i) => (
+              {(summary.conversationsPerDay.length
+                ? summary.conversationsPerDay
+                : [{ day: 'Sin datos', value: 0 }]
+              ).map((item, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2">
                   <div className="w-full relative group">
                     <div
                       className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-300 hover:from-blue-700 hover:to-blue-500"
-                      style={{ height: `${(item.value / 70) * 100}%` }}
+                      style={{ height: summary.conversationsPerDay.length ? `${(item.value / Math.max(...summary.conversationsPerDay.map(d => d.value || 1))) * 100}%` : '10%' }}
                     ></div>
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-2 py-1 rounded text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                       {item.value} conversaciones
@@ -125,24 +143,23 @@ export const DashboardView = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
-              {[
-                { name: "Hamburguesa Clásica", value: 45, amount: "$5,234", color: "bg-blue-600" },
-                { name: "Pizza Margarita", value: 30, amount: "$3,892", color: "bg-green-600" },
-                { name: "Ensalada César", value: 25, amount: "$2,987", color: "bg-purple-600" },
-              ].map((item, i) => (
+              {(summary.topProducts.length
+                ? summary.topProducts
+                : []
+              ).map((item, i) => (
                 <div key={i}>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                       {item.name}
                     </span>
                     <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                      {item.amount}
+                      {formatBs(item.amountBs)}
                     </span>
                   </div>
                   <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
-                      className={`h-full ${item.color} transition-all duration-500`}
-                      style={{ width: `${item.value}%` }}
+                      className={`h-full ${item.color ?? 'bg-blue-600'} transition-all duration-500`}
+                      style={{ width: `${item.valuePercent}%` }}
                     ></div>
                   </div>
                 </div>
@@ -175,7 +192,10 @@ export const DashboardView = () => {
                 </tr>
               </thead>
               <tbody>
-                {recentConversations.map((conv) => (
+                {(summary.recentConversations.length
+                  ? summary.recentConversations
+                  : []
+                ).map((conv) => (
                   <tr
                     key={conv.id}
                     className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
