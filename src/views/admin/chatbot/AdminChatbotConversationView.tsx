@@ -1,10 +1,19 @@
 
 import { useState } from "react";
 import { useTheme } from "../../../context";
+import { useConversations } from "../../../hooks/chatbot/useConversations";
 
 export const AdminChatbotConversationView = () => {
   const { isDark } = useTheme()
-  const [selectedConversation, setSelectedConversation] = useState<number | null>(null)
+  const { 
+    channel, 
+    setChannel, 
+    conversations, 
+    selectedConversation, 
+    messages, 
+    selectConversation,
+  } = useConversations()
+
   const [filterStatus, setFilterStatus] = useState("all")
 
   const cardBg = isDark ? "bg-slate-800/50 backdrop-blur-sm" : "bg-white/80 backdrop-blur-sm"
@@ -12,49 +21,6 @@ export const AdminChatbotConversationView = () => {
   const textPrimary = isDark ? "text-slate-50" : "text-gray-900"
   const textSecondary = isDark ? "text-slate-400" : "text-gray-600"
   const activeBg = isDark ? "bg-slate-700" : "bg-blue-50"
-
-  const conversations = [
-    {
-      id: 1,
-      phone: "+56 9 12345678",
-      status: "completed",
-      messages: 12,
-      date: "Hace 2 horas",
-      state: "confirmed",
-    },
-    {
-      id: 2,
-      phone: "+56 9 87654321",
-      status: "active",
-      messages: 5,
-      date: "Hace 5 minutos",
-      state: "ordering",
-    },
-    {
-      id: 3,
-      phone: "+56 9 56789012",
-      status: "completed",
-      messages: 18,
-      date: "Hace 1 día",
-      state: "confirmed",
-    },
-    {
-      id: 4,
-      phone: "+56 9 34567890",
-      status: "pending",
-      messages: 3,
-      date: "Hace 30 minutos",
-      state: "welcome",
-    },
-    {
-      id: 5,
-      phone: "+56 9 23456789",
-      status: "active",
-      messages: 8,
-      date: "Hace 10 minutos",
-      state: "browsing_catalog",
-    },
-  ]
 
   const filteredConversations =
     filterStatus === "all" ? conversations : conversations.filter((c) => c.status === filterStatus)
@@ -96,8 +62,6 @@ export const AdminChatbotConversationView = () => {
     return labels[state] || state
   }
 
-  const selectedChat = conversations.find((c) => c.id === selectedConversation)
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -110,6 +74,37 @@ export const AdminChatbotConversationView = () => {
         {/* Conversations List */}
         <div className="lg:col-span-1">
           <div className={`${cardBg} rounded-xl border ${cardBorder} p-4 shadow-sm`}>
+            {/* Channel selector */}
+            <div className="mb-4 flex gap-2">
+              <button
+                type="button"
+                onClick={() => setChannel("whatsapp")}
+                className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                  channel === "whatsapp"
+                    ? "bg-green-500 text-white border-green-600 shadow-sm"
+                    : isDark
+                    ? "bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700"
+                    : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
+                }`}
+              >
+                <i className="bi bi-whatsapp"></i>
+                WhatsApp
+              </button>
+              <button
+                type="button"
+                onClick={() => setChannel("telegram")}
+                className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                  channel === "telegram"
+                    ? "bg-sky-500 text-white border-sky-600 shadow-sm"
+                    : isDark
+                    ? "bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700"
+                    : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
+                }`}
+              >
+                <i className="bi bi-telegram"></i>
+                Telegram
+              </button>
+            </div>
             {/* Filter */}
             <div className="mb-4">
               <select
@@ -129,9 +124,9 @@ export const AdminChatbotConversationView = () => {
               {filteredConversations.map((conversation) => (
                 <button
                   key={conversation.id}
-                  onClick={() => setSelectedConversation(conversation.id)}
+                  onClick={() => void selectConversation(conversation.id)}
                   className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
-                    selectedConversation === conversation.id ? `${activeBg} border border-blue-500` : `hover:${activeBg}`
+                    selectedConversation?.id === conversation.id ? `${activeBg} border border-blue-500` : `hover:${activeBg}`
                   }`}
                 >
                   <div className="flex items-start justify-between mb-2">
@@ -152,20 +147,20 @@ export const AdminChatbotConversationView = () => {
 
         {/* Chat Details */}
         <div className="lg:col-span-2">
-          {selectedChat ? (
+          {selectedConversation ? (
             <div className={`${cardBg} rounded-xl border ${cardBorder} shadow-sm overflow-hidden flex flex-col h-96`}>
               {/* Header */}
               <div className={`${isDark ? "bg-slate-700" : "bg-gradient-to-r from-blue-600 to-blue-700"} text-white p-4 flex items-center justify-between`}>
                 <div>
-                  <h2 className="font-bold">{selectedChat.phone}</h2>
+                  <h2 className="font-bold">{selectedConversation.phone}</h2>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(selectedChat.status)}`}>
-                      {selectedChat.status}
+                    <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(selectedConversation.status)}`}>
+                      {selectedConversation.status}
                     </span>
                     <div
-                      className={`px-2 py-1 text-xs rounded-full bg-gradient-to-r ${getStateColor(selectedChat.state)} text-white`}
+                      className={`px-2 py-1 text-xs rounded-full bg-gradient-to-r ${getStateColor(selectedConversation.state)} text-white`}
                     >
-                      {getStateLabel(selectedChat.state)}
+                      {getStateLabel(selectedConversation.state)}
                     </div>
                   </div>
                 </div>
@@ -176,26 +171,38 @@ export const AdminChatbotConversationView = () => {
 
               {/* Messages */}
               <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${isDark ? "bg-slate-800" : "bg-gray-50"}`}>
-                <div className="flex gap-3">
-                  <div className={`${isDark ? "bg-slate-700" : "bg-white"} rounded-lg p-3 max-w-xs`}>
-                    <p className={`text-sm ${textPrimary}`}>Hola, ¿qué productos tienes?</p>
-                    <span className={`text-xs ${textSecondary} mt-1 block`}>10:30 AM</span>
+                {messages.length === 0 && (
+                  <div className="h-full flex items-center justify-center">
+                    <p className={`text-sm ${textSecondary}`}>No hay mensajes para esta conversación.</p>
                   </div>
-                </div>
+                )}
 
-                <div className="flex gap-3 justify-end">
-                  <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-3 max-w-xs">
-                    <p className="text-sm">Tenemos una gran variedad, ¿qué te interesa?</p>
-                    <span className="text-xs opacity-70 mt-1 block">10:31 AM</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <div className={`${isDark ? "bg-slate-700" : "bg-white"} rounded-lg p-3 max-w-xs`}>
-                    <p className={`text-sm ${textPrimary}`}>Me interesa una hamburguesa</p>
-                    <span className={`text-xs ${textSecondary} mt-1 block`}>10:32 AM</span>
-                  </div>
-                </div>
+                {messages.map((msg) => {
+                  const isBot = msg.from === "bot"
+                  return (
+                    <div
+                      key={msg.id}
+                      className={`flex gap-3 ${isBot ? "justify-end" : "justify-start"}`}
+                    >
+                      <div
+                        className={
+                          isBot
+                            ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-3 max-w-xs"
+                            : `${isDark ? "bg-slate-700" : "bg-white"} rounded-lg p-3 max-w-xs`
+                        }
+                      >
+                        <p className={`text-sm ${isBot ? "" : textPrimary}`}>{msg.text}</p>
+                        <span
+                          className={`text-xs mt-1 block ${
+                            isBot ? "opacity-70" : textSecondary
+                          }`}
+                        >
+                          {msg.time}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
 
               {/* Input */}

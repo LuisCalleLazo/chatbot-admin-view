@@ -26,7 +26,7 @@ const formatBs = (amount: number) =>
 
 export const DashboardView = () => {
   // const { isDark } = useTheme()
-  const { summary, loading } = useDashboard()
+  const { summary } = useDashboard()
 
   const stats = [
     {
