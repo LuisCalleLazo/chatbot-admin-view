@@ -1,12 +1,15 @@
 export interface BusinessImage {
   id: number
   businessConfigId: number
-  url?: string
+  file: string
+  isInMessagePrincipal: boolean
+  url?: string // alias para mostrar en UI
 }
 
 export interface BusinessConfig {
   id: number
   typeBusiness: number
+  qrStatic?: string
   name: string
   email: string
   phoneNumber: string
@@ -15,6 +18,5 @@ export interface BusinessConfig {
   conversationExpHours: number
   qrExpHours: number
   plan: string
-  businessImages?: BusinessImage[]
+  businessImages: BusinessImage[]
 }
-

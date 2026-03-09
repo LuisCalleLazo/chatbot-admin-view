@@ -1,11 +1,10 @@
 export interface ChatbotSettings {
-  // Whatsapp
+  id?: number
+  userId?: number
+  schemaName: string
+  messagePrincipal: string
   whatsappPhoneNumberId: string
   whatsappAccessToken: string
-  whatsappApiUrl: string
-  whatsappWebhookVerifyToken: string
-
-  // Telegram
+  whatsappWebhookVerifyToken: string // readonly - generado por backend
   telegramToken: string
 }
-

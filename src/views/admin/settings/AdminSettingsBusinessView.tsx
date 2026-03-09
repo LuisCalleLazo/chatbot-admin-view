@@ -1,24 +1,31 @@
-import { Button, Input, Textarea, Select, Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../../components"
-import { useBusinessConfig } from "../../../hooks/chatbot/useBusinessConfig"
+import {
+  Button,
+  Input,
+  Textarea,
+  Select,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../../../components";
+import { useBusinessConfig } from "../../../hooks/chatbot/useBusinessConfig";
 
 const businessTypes = [
-  // TypeBusiness enum:
-  // 1 FoodAndBeverage, 2 RetailStore, 3 ServiceWithAppointment,
-  // 4 DigitalBusiness, 5 Accommodation, 6 DeliveryOnly, 7 EventBased
-  { id: 1, label: "Comida y Bebidas", icon: "bi-cup-hot" }, // FoodAndBeverage
-  { id: 2, label: "Tienda física / Retail", icon: "bi-shop" }, // RetailStore
-  { id: 3, label: "Servicios con cita", icon: "bi-calendar2-check" }, // ServiceWithAppointment
-  { id: 4, label: "Negocio digital", icon: "bi-pc-display" }, // DigitalBusiness
-  { id: 5, label: "Alojamiento / Hotelería", icon: "bi-building" }, // Accommodation
-  { id: 6, label: "Solo delivery", icon: "bi-truck" }, // DeliveryOnly
-  { id: 7, label: "Eventos", icon: "bi-calendar-event" }, // EventBased
-]
+  { id: 1, label: "Comida y Bebidas", icon: "bi-cup-hot" },
+  { id: 2, label: "Tienda física / Retail", icon: "bi-shop" },
+  { id: 3, label: "Servicios con cita", icon: "bi-calendar2-check" },
+  { id: 4, label: "Negocio digital", icon: "bi-pc-display" },
+  { id: 5, label: "Alojamiento / Hotelería", icon: "bi-building" },
+  { id: 6, label: "Solo delivery", icon: "bi-truck" },
+  { id: 7, label: "Eventos", icon: "bi-calendar-event" },
+];
 
 const planOptions = [
   { value: "Basic", label: "Basic" },
   { value: "Professional", label: "Professional" },
   { value: "Enterprise", label: "Enterprise" },
-]
+];
 
 export const AdminSettingsBusinessView = () => {
   const {
@@ -29,12 +36,14 @@ export const AdminSettingsBusinessView = () => {
     handleFieldChange,
     handleImagesChange,
     saveBusinessConfig,
-  } = useBusinessConfig()
+    handleDeleteImage,
+    handleToggleImagePrincipal,
+  } = useBusinessConfig();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    void saveBusinessConfig()
-  }
+    e.preventDefault();
+    void saveBusinessConfig();
+  };
 
   return (
     <div className="space-y-6">
@@ -43,23 +52,28 @@ export const AdminSettingsBusinessView = () => {
           Configuración del Negocio
         </h1>
         <p className="mt-2 text-slate-600 dark:text-slate-400">
-          Define la información principal de tu negocio y cómo se mostrará en el chatbot.
+          Define la información principal de tu negocio y cómo se mostrará en el
+          chatbot.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* ─── Tipo de negocio ─────────────────────────────────────────────── */}
         <Card variant="elevated">
           <CardHeader>
             <CardTitle>Tipo de negocio</CardTitle>
-            <CardDescription>Selecciona la categoría que mejor describe tu negocio</CardDescription>
+            <CardDescription>
+              Selecciona la categoría que mejor describe tu negocio
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3">
               {businessTypes.map((type) => (
                 <button
                   key={type.id}
                   type="button"
                   onClick={() => handleFieldChange("typeBusiness", type.id)}
+                  disabled={loading}
                   className={`p-4 rounded-xl border-2 transition-all duration-200 text-center ${
                     config.typeBusiness === type.id
                       ? "border-blue-600 bg-blue-50 dark:bg-blue-950/50 shadow-md"
@@ -72,7 +86,7 @@ export const AdminSettingsBusinessView = () => {
                         ? "text-blue-600 dark:text-blue-400"
                         : "text-slate-500 dark:text-slate-400"
                     }`}
-                  ></i>
+                  />
                   <span
                     className={`text-xs font-medium ${
                       config.typeBusiness === type.id
@@ -88,10 +102,13 @@ export const AdminSettingsBusinessView = () => {
           </CardContent>
         </Card>
 
+        {/* ─── Información básica ──────────────────────────────────────────── */}
         <Card variant="elevated">
           <CardHeader>
             <CardTitle>Información del negocio</CardTitle>
-            <CardDescription>Datos básicos de contacto y descripción</CardDescription>
+            <CardDescription>
+              Datos básicos de contacto y descripción
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -100,7 +117,7 @@ export const AdminSettingsBusinessView = () => {
                 value={config.name}
                 onChange={(e) => handleFieldChange("name", e.target.value)}
                 placeholder="Nombre de tu negocio"
-                leftIcon={<i className="bi bi-shop text-lg"></i>}
+                leftIcon={<i className="bi bi-shop text-lg" />}
                 fullWidth
                 disabled={loading}
               />
@@ -109,9 +126,11 @@ export const AdminSettingsBusinessView = () => {
                 label="Teléfono"
                 type="tel"
                 value={config.phoneNumber}
-                onChange={(e) => handleFieldChange("phoneNumber", e.target.value)}
+                onChange={(e) =>
+                  handleFieldChange("phoneNumber", e.target.value)
+                }
                 placeholder="+56 9 12345678"
-                leftIcon={<i className="bi bi-telephone text-lg"></i>}
+                leftIcon={<i className="bi bi-telephone text-lg" />}
                 fullWidth
                 disabled={loading}
               />
@@ -123,7 +142,7 @@ export const AdminSettingsBusinessView = () => {
                   value={config.email}
                   onChange={(e) => handleFieldChange("email", e.target.value)}
                   placeholder="contacto@minegocio.com"
-                  leftIcon={<i className="bi bi-envelope text-lg"></i>}
+                  leftIcon={<i className="bi bi-envelope text-lg" />}
                   fullWidth
                   disabled={loading}
                 />
@@ -133,7 +152,9 @@ export const AdminSettingsBusinessView = () => {
                 <Textarea
                   label="Descripción"
                   value={config.description}
-                  onChange={(e) => handleFieldChange("description", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("description", e.target.value)
+                  }
                   placeholder="Cuéntanos sobre tu negocio..."
                   rows={4}
                   fullWidth
@@ -144,19 +165,25 @@ export const AdminSettingsBusinessView = () => {
           </CardContent>
         </Card>
 
+        {/* ─── Atención y expiración ───────────────────────────────────────── */}
         <Card variant="elevated">
           <CardHeader>
             <CardTitle>Atención y expiración</CardTitle>
-            <CardDescription>Configura cómo y por cuánto tiempo se mantienen activas las conversaciones</CardDescription>
+            <CardDescription>
+              Configura cómo y por cuánto tiempo se mantienen activas las
+              conversaciones
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Input
                 label="Método de atención"
                 value={config.methodAttention}
-                onChange={(e) => handleFieldChange("methodAttention", e.target.value)}
-                placeholder="Presencial, Delivery, Mixto, etc."
-                leftIcon={<i className="bi bi-people text-lg"></i>}
+                onChange={(e) =>
+                  handleFieldChange("methodAttention", e.target.value)
+                }
+                placeholder="Presencial, Delivery, Mixto…"
+                leftIcon={<i className="bi bi-people text-lg" />}
                 fullWidth
                 disabled={loading}
               />
@@ -167,10 +194,13 @@ export const AdminSettingsBusinessView = () => {
                 min={1}
                 value={config.conversationExpHours}
                 onChange={(e) =>
-                  handleFieldChange("conversationExpHours", Number(e.target.value) || 0)
+                  handleFieldChange(
+                    "conversationExpHours",
+                    Number(e.target.value) || 0,
+                  )
                 }
                 placeholder="24"
-                leftIcon={<i className="bi bi-clock-history text-lg"></i>}
+                leftIcon={<i className="bi bi-clock-history text-lg" />}
                 fullWidth
                 disabled={loading}
               />
@@ -180,9 +210,11 @@ export const AdminSettingsBusinessView = () => {
                 type="number"
                 min={1}
                 value={config.qrExpHours}
-                onChange={(e) => handleFieldChange("qrExpHours", Number(e.target.value) || 0)}
+                onChange={(e) =>
+                  handleFieldChange("qrExpHours", Number(e.target.value) || 0)
+                }
                 placeholder="24"
-                leftIcon={<i className="bi bi-qr-code text-lg"></i>}
+                leftIcon={<i className="bi bi-qr-code text-lg" />}
                 fullWidth
                 disabled={loading}
               />
@@ -201,15 +233,18 @@ export const AdminSettingsBusinessView = () => {
           </CardContent>
         </Card>
 
+        {/* ─── Imágenes del negocio ────────────────────────────────────────── */}
         <Card variant="elevated">
           <CardHeader>
             <CardTitle>Imágenes del negocio</CardTitle>
             <CardDescription>
-              Sube imágenes que se usarán en el chatbot (logo, portada, galería, etc.)
+              Sube imágenes que se usarán en el chatbot (logo, portada, galería,
+              etc.). Las imágenes se guardan en Cloudinary.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
+              {/* Selector de archivos */}
               <Input
                 type="file"
                 multiple
@@ -218,17 +253,19 @@ export const AdminSettingsBusinessView = () => {
                 fullWidth
               />
 
+              {/* Preview de imágenes seleccionadas (nuevas) */}
               {selectedImages.length > 0 && (
-                <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 p-4">
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                    Imágenes seleccionadas ({selectedImages.length})
+                <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30 p-4">
+                  <p className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">
+                    <i className="bi bi-upload me-1" />
+                    Nuevas imágenes a subir ({selectedImages.length})
                   </p>
                   <ul className="space-y-1 text-sm text-slate-600 dark:text-slate-300">
                     {selectedImages.map((file, index) => (
                       <li key={index} className="flex items-center gap-2">
-                        <i className="bi bi-image text-blue-500"></i>
+                        <i className="bi bi-image text-blue-500" />
                         <span className="truncate">{file.name}</span>
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-slate-400 ml-auto shrink-0">
                           ({Math.round(file.size / 1024)} KB)
                         </span>
                       </li>
@@ -237,39 +274,101 @@ export const AdminSettingsBusinessView = () => {
                 </div>
               )}
 
-              {config.businessImages && config.businessImages.length > 0 && (
-                <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                    Imágenes registradas actualmente
+              {/* Imágenes ya guardadas */}
+              {config.businessImages.length > 0 && (
+                <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-3">
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                    Imágenes registradas ({config.businessImages.length})
                   </p>
-                  <ul className="space-y-1 text-sm text-slate-600 dark:text-slate-300">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {config.businessImages.map((img) => (
-                      <li key={img.id} className="flex items-center gap-2">
-                        <i className="bi bi-check-circle text-emerald-500"></i>
-                        <span>Imagen #{img.id}</span>
-                        {img.url && (
-                          <a
-                            href={img.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-xs text-blue-500 hover:underline"
-                          >
-                            Ver
-                          </a>
+                      <div
+                        key={img.id}
+                        className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50"
+                      >
+                        {/* Thumbnail */}
+                        {img.file ? (
+                          <img
+                            src={img.file}
+                            alt={`Imagen #${img.id}`}
+                            className="w-12 h-12 rounded-lg object-cover shrink-0 border border-slate-200 dark:border-slate-600"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+                            <i className="bi bi-image text-slate-400 text-xl" />
+                          </div>
                         )}
-                      </li>
+
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-slate-700 dark:text-slate-200 truncate">
+                            Imagen #{img.id}
+                          </p>
+                          {img.file && (
+                            <a
+                              href={img.file}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-xs text-blue-500 hover:underline"
+                            >
+                              Ver en Cloudinary
+                            </a>
+                          )}
+                        </div>
+
+                        {/* Toggle principal */}
+                        <button
+                          type="button"
+                          title={
+                            img.isInMessagePrincipal
+                              ? "Quitar del mensaje principal"
+                              : "Usar en mensaje principal"
+                          }
+                          onClick={() =>
+                            void handleToggleImagePrincipal(
+                              img.id,
+                              img.isInMessagePrincipal,
+                            )
+                          }
+                          className={`shrink-0 p-1.5 rounded-lg transition-colors ${
+                            img.isInMessagePrincipal
+                              ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100"
+                              : "text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700"
+                          }`}
+                        >
+                          <i
+                            className={`bi ${img.isInMessagePrincipal ? "bi-star-fill" : "bi-star"} text-base`}
+                          />
+                        </button>
+
+                        {/* Eliminar */}
+                        <button
+                          type="button"
+                          title="Eliminar imagen"
+                          onClick={() => void handleDeleteImage(img.id)}
+                          className="shrink-0 p-1.5 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                        >
+                          <i className="bi bi-trash text-base" />
+                        </button>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
+
+                  <p className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1">
+                    <i className="bi bi-star-fill text-emerald-500" />= imagen
+                    usada en el mensaje principal del chatbot
+                  </p>
                 </div>
               )}
             </div>
           </CardContent>
         </Card>
 
+        {/* ─── Guardar ─────────────────────────────────────────────────────── */}
         <div className="flex justify-end">
           <Button
             type="submit"
-            icon={<i className="bi bi-check-circle"></i>}
+            icon={<i className="bi bi-check-circle" />}
             size="lg"
             loading={saving}
             disabled={loading}
@@ -279,5 +378,5 @@ export const AdminSettingsBusinessView = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};

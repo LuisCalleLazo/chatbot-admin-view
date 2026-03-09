@@ -4,61 +4,102 @@ import type { Response } from '../../interfaces/IResponse'
 import type { BusinessConfig } from '../../interfaces/IBusinessConfig'
 import { ManageErrorAxios } from '../../utils/ManageErrorAxios'
 
-export interface BusinessConfigPayload extends Omit<BusinessConfig, 'businessImages'> {
+export interface BusinessConfigPayload {
+  typeBusiness: number
+  name: string
+  email: string
+  phoneNumber: string
+  description: string
+  methodAttention: string
+  conversationExpHours: number
+  qrExpHours: number
   images?: File[]
 }
 
+/**
+ * GET /api/config/business
+ * Obtiene la config del negocio. Si no existe, el backend la crea automáticamente.
+ */
 export const getBusinessConfig = async () => {
   try {
-    // Ajusta el endpoint cuando tengas la API lista
-    const response = await chatbotApi.get<Response<BusinessConfig>>('v1/business-config')
+    const response = await chatbotApi.get<Response<BusinessConfig>>('/config/business')
     return response.data
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      ManageErrorAxios(error)
-    }
+    if (axios.isAxiosError(error)) ManageErrorAxios(error)
     throw error
   }
 }
 
+/**
+ * PUT /api/config/business
+ * Actualiza los campos de configuración del negocio.
+ */
 export const updateBusinessConfig = async (payload: BusinessConfigPayload) => {
   try {
-    const formData = new FormData()
+    // Separar campos de texto e imágenes
+    const { images, ...fields } = payload
 
-    if (payload.id) {
-      formData.append('id', String(payload.id))
+    // 1. Actualizar datos del negocio
+    const response = await chatbotApi.put<Response<BusinessConfig>>('/config/business', fields)
+
+    // 2. Subir imágenes nuevas si hay
+    if (images && images.length > 0) {
+      await uploadBusinessImages(images)
     }
-
-    formData.append('typeBusiness', String(payload.typeBusiness))
-    formData.append('name', payload.name)
-    formData.append('email', payload.email)
-    formData.append('phoneNumber', payload.phoneNumber)
-    formData.append('description', payload.description)
-    formData.append('methodAttention', payload.methodAttention)
-    formData.append('conversationExpHours', String(payload.conversationExpHours))
-    formData.append('qrExpHours', String(payload.qrExpHours))
-    formData.append('plan', payload.plan)
-
-    if (payload.images && payload.images.length > 0) {
-      payload.images.forEach((file, index) => {
-        // Ajusta el nombre del campo según lo que espere tu API (por ejemplo "images", "businessImages", etc.)
-        formData.append(`images[${index}]`, file)
-      })
-    }
-
-    // Ajusta método (POST/PUT) y endpoint según tu API
-    const response = await chatbotApi.put<Response<BusinessConfig>>('v1/business-config', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
 
     return response.data
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      ManageErrorAxios(error)
-    }
+    if (axios.isAxiosError(error)) ManageErrorAxios(error)
     throw error
   }
 }
 
+/**
+ * POST /api/config/business/images
+ * Sube imágenes al negocio. Cada imagen se sube individualmente.
+ */
+export const uploadBusinessImages = async (files: File[], isInMessagePrincipal = false) => {
+  try {
+    const uploadPromises = files.map((file) => {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('isInMessagePrincipal', String(isInMessagePrincipal))
+      return chatbotApi.post('/config/business/images', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+    })
+    await Promise.all(uploadPromises)
+  } catch (error) {
+    if (axios.isAxiosError(error)) ManageErrorAxios(error)
+    throw error
+  }
+}
+
+/**
+ * PATCH /api/config/business/images/:imageId
+ * Actualiza metadatos de una imagen (isInMessagePrincipal).
+ */
+export const updateBusinessImageMeta = async (imageId: number, isInMessagePrincipal: boolean) => {
+  try {
+    const response = await chatbotApi.patch(`/config/business/images/${imageId}`, {
+      isInMessagePrincipal,
+    })
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error)) ManageErrorAxios(error)
+    throw error
+  }
+}
+
+/**
+ * DELETE /api/config/business/images/:imageId
+ * Elimina una imagen del negocio.
+ */
+export const deleteBusinessImage = async (imageId: number) => {
+  try {
+    await chatbotApi.delete(`/config/business/images/${imageId}`)
+  } catch (error) {
+    if (axios.isAxiosError(error)) ManageErrorAxios(error)
+    throw error
+  }
+}

@@ -26,12 +26,12 @@ export const PrivateHomeRoute: React.FC<{element: React.ReactElement}> = ({ elem
   if (loading)
     return <LoadingValidate />;
 
-  if (isAuthenticated == false || admin != 'Admin') 
-    return <Navigate to="/home" replace />;
 
   if(admin == 'Admin' && isAuthenticated == true)  
     return <Navigate to="/admin" replace />;
 
+  if (isAuthenticated == false || admin != 'Admin') 
+    return element;
 
   return element
 }

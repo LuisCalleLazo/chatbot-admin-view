@@ -6,10 +6,9 @@ export const getOrGenerateDbClient = async () =>
 {
   try
   {
-    const response = await chatbotApi.post<Response<boolean>>('auth/login');
+    const response = await chatbotApi.post<Response<boolean>>('/chatbot');
     console.log(response.data);
 
-    
     return response.data;
 
   }catch(error)
