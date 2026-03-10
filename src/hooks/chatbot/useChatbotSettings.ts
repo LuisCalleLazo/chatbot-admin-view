@@ -34,10 +34,10 @@ export const useChatbotSettings = () => {
     await executeAsyncAction({
       asyncFunction: async () => await getChatbotSettings(),
       successAction: (response) => {
-        if (response.data) {
-          setSettings(response.data)
+        if (response) {
+          setSettings(response)
           // Si tiene schemaName es porque el schema ya fue inicializado
-          setSchemaReady(!!response.data.schemaName)
+          setSchemaReady(!!response.schemaName)
         }
       },
       errorAction: () => {
@@ -70,9 +70,9 @@ export const useChatbotSettings = () => {
     await executeAsyncAction({
       asyncFunction: async () => await updateChatbotSettings(payload),
       successAction: (response) => {
-        if (response.data) {
-          setSettings(response.data)
-          setSchemaReady(!!response.data.schemaName)
+        if (response) {
+          setSettings(response)
+          setSchemaReady(!!response.schemaName)
         }
         toast.success('Configuración de canales del chatbot guardada correctamente')
       },

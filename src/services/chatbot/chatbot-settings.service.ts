@@ -20,7 +20,7 @@ export interface ChatbotSettingsPayload {
  */
 export const getChatbotSettings = async () => {
   try {
-    const response = await chatbotApi.get<Response<ChatbotSettings>>('/config/chat')
+    const response = await chatbotApi.get<ChatbotSettings>('/config/chat')
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) ManageErrorAxios(error)
@@ -34,7 +34,7 @@ export const getChatbotSettings = async () => {
  */
 export const updateChatbotSettings = async (payload: ChatbotSettingsPayload) => {
   try {
-    const response = await chatbotApi.put<Response<ChatbotSettings>>('/config/chat', payload)
+    const response = await chatbotApi.put<ChatbotSettings>('/config/chat', payload)
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) ManageErrorAxios(error)

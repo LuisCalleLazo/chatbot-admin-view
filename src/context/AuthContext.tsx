@@ -12,20 +12,20 @@ interface Props {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider : React.FC<Props> = ({ children }) => {
+export const AuthProvider: React.FC<Props> = ({ children }) => {
 
-  const userDefault = { 
-    id : 0, name : 'string', email : 'string', photo : 'string', firstName : 'string', 
-    dadLastName : 'String', momLastName : 'string', age : 0, ci : 'string'
+  const userDefault = {
+    id: 0, name: 'string', email: 'string', photo: 'string', firstName: 'string',
+    dadLastName: 'String', momLastName: 'string', age: 0, ci: 'string'
   }
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const [admin, setAdmin] =  useState<string>('none');
+  const [admin, setAdmin] = useState<string>('none');
 
 
-  const [loading, setLoading] = useState<boolean>(true); 
-  const [init, setInit] = useState<boolean>(false); 
+  const [loading, setLoading] = useState<boolean>(true);
+  const [init, setInit] = useState<boolean>(false);
   const [user, setUser] = useState<UserAuthResponse>(userDefault);
   const navigate = useNavigate();
 
@@ -39,10 +39,9 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
         try {
           const decodedToken = jwtDecode<DecodedToken>(token);
           const currentTime = Date.now() / 1000;
-          
-          if (decodedToken.exp > currentTime) 
-          {
-            
+
+          if (decodedToken.exp > currentTime) {
+
             setAdmin(decodedToken.roles);
 
             setIsAuthenticated(true);
@@ -50,7 +49,7 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
           }
 
           setInit(true);
-          
+
         } catch (error) {
           console.error("Token validation error:", error);
           logout();
@@ -65,33 +64,34 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
 
   const login = async (loginData: LoginData) => {
     try {
-      
-    setLoading(true);
-    executeAsyncAction<Response<LoginResponse>>({
-      asyncFunction: async () => await loginServ(loginData),
-      successAction: (data) => {
-        setUser(data.data.user);
-        setIsAuthenticated(true);
-        toast.success("Inicio de session correcto");
-        navigateAccess(data.data.currentToken)
-      },
-      finalAction: () => setLoading(false),
-    });
-      
+
+      setLoading(true);
+      executeAsyncAction<Response<LoginResponse>>({
+        asyncFunction: async () => await loginServ(loginData),
+        successAction: (data) => {
+          const decodedToken = jwtDecode<DecodedToken>(data.data.currentToken);
+          setUser(data.data.user);
+          setAdmin(decodedToken.roles);
+          setIsAuthenticated(true);
+          toast.success("Inicio de session correcto");
+          navigateAccess(data.data.currentToken)
+        },
+        finalAction: () => setLoading(false),
+      });
+
     } catch (error) {
       toast.error("Credenciales incorrectas!");
       console.error('Login failed:', error);
     }
   };
 
-  
-  const navigateAccess = (token : string) =>
-  {
+
+  const navigateAccess = (token: string) => {
     const decodedToken = jwtDecode<DecodedToken>(token);
-    
+
     if (decodedToken.roles == 'Admin') {
       navigate('/admin');
-    } else{
+    } else {
       navigate('/auth/register')
     }
   }
@@ -106,9 +106,9 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
 
   const refreshToken = async () => {
     try {
-      const data = await refreshTokenService({ 
-        tokenExpired: localStorage.getItem('token')!, 
-        refreshToken : localStorage.getItem('refreshToken')! 
+      const data = await refreshTokenService({
+        tokenExpired: localStorage.getItem('token')!,
+        refreshToken: localStorage.getItem('refreshToken')!
       });
       setUser(data.user);
       setIsAuthenticated(true);
@@ -120,17 +120,17 @@ export const AuthProvider : React.FC<Props> = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ 
-        isAuthenticated, 
-        loading, 
-        user, 
-        init, 
-        setUser,
-        admin, 
-        rols : [],
-        login,
-        logout, 
-        refreshToken 
+    <AuthContext.Provider value={{
+      isAuthenticated,
+      loading,
+      user,
+      init,
+      setUser,
+      admin,
+      rols: [],
+      login,
+      logout,
+      refreshToken
     }}>
       {children}
     </AuthContext.Provider>
