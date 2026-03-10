@@ -39,11 +39,11 @@ export const useBusinessConfig = () => {
     await executeAsyncAction({
       asyncFunction: async () => await getBusinessConfig(),
       successAction: (response) => {
-        if (response.data) {
+        if (response) {
           // Normalizar: asegura que businessImages siempre sea array
           setConfig({
-            ...response.data,
-            businessImages: response.data.businessImages ?? [],
+            ...response,
+            businessImages: response.businessImages ?? [],
           })
         }
       },
@@ -83,10 +83,10 @@ export const useBusinessConfig = () => {
     await executeAsyncAction({
       asyncFunction: async () => await updateBusinessConfig(payload),
       successAction: (response) => {
-        if (response.data) {
+        if (response) {
           setConfig({
-            ...response.data,
-            businessImages: response.data.businessImages ?? [],
+            ...response,
+            businessImages: response.businessImages ?? [],
           })
         }
         setSelectedImages([])

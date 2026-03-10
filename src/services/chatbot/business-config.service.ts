@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { chatbotApi } from '../api'
-import type { Response } from '../../interfaces/IResponse'
 import type { BusinessConfig } from '../../interfaces/IBusinessConfig'
 import { ManageErrorAxios } from '../../utils/ManageErrorAxios'
 
@@ -22,7 +21,7 @@ export interface BusinessConfigPayload {
  */
 export const getBusinessConfig = async () => {
   try {
-    const response = await chatbotApi.get<Response<BusinessConfig>>('/config/business')
+    const response = await chatbotApi.get<BusinessConfig>('/config/business')
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) ManageErrorAxios(error)
@@ -40,7 +39,7 @@ export const updateBusinessConfig = async (payload: BusinessConfigPayload) => {
     const { images, ...fields } = payload
 
     // 1. Actualizar datos del negocio
-    const response = await chatbotApi.put<Response<BusinessConfig>>('/config/business', fields)
+    const response = await chatbotApi.put<BusinessConfig>('/config/business', fields)
 
     // 2. Subir imágenes nuevas si hay
     if (images && images.length > 0) {
