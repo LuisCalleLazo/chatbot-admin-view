@@ -1,24 +1,28 @@
+// src/interfaces/IConversation.ts
 export type ConversationChannel = 'whatsapp' | 'telegram'
 
 export interface ConversationSummary {
   id: number
   phone: string
-  status: string
-  messages: number
-  date: string
+  firstName?: string
+  lastName?: string
+  status: 'active' | 'completed' | 'pending'
   state: string
-  channel: ConversationChannel
+  messageCount: number
+  lastMessageAt: string
+  startedAt: string
 }
 
-export interface ConversationMessage {
+export interface MessageDto {
   id: number
-  from: 'user' | 'bot'
-  text: string
-  time: string
+  direction: 'inbound' | 'outbound'
+  messageType: 'text' | 'image' | 'interactive' | 'button'
+  content: string
+  mediaUrl?: string
+  status: string
+  sentAt: string
 }
 
-export interface ConversationDetail {
-  conversation: ConversationSummary
-  messages: ConversationMessage[]
+export interface ConversationDetail extends ConversationSummary {
+  messages: MessageDto[]
 }
-
