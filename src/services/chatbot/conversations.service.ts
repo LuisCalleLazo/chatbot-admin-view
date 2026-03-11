@@ -7,7 +7,7 @@ import { ManageErrorAxios } from '../../utils/ManageErrorAxios'
 
 export const getConversations = async (channel: ConversationChannel, status?: string) => {
   try {
-    const response = await chatbotApi.get<Response<ConversationSummary[]>>('conversations', {
+    const response = await chatbotApi.get<Response<ConversationSummary[]>>('chatbot/conversations', {
       params: { channel, ...(status && status !== 'all' ? { status } : {}) },
     })
     return response.data
@@ -19,7 +19,7 @@ export const getConversations = async (channel: ConversationChannel, status?: st
 
 export const getConversationDetail = async (id: number, channel: ConversationChannel) => {
   try {
-    const response = await chatbotApi.get<Response<ConversationDetail>>(`conversations/${id}`, {
+    const response = await chatbotApi.get<Response<ConversationDetail>>(`chatbot/conversations/${id}`, {
       params: { channel },
     })
     return response.data
@@ -34,7 +34,7 @@ export const sendTextMessage = async (conversationId: number, text: string) => {
     const formData = new FormData()
     formData.append('text', text)
     const response = await chatbotApi.post<Response<{ id: number; sentAt: string }>>(
-      `conversations/${conversationId}/messages`,
+      `chatbot/conversations/${conversationId}/messages`,
       formData
     )
     return response.data
@@ -50,7 +50,7 @@ export const sendFileMessage = async (conversationId: number, file: File, captio
     formData.append('file', file)
     if (caption) formData.append('text', caption)
     const response = await chatbotApi.post<Response<{ id: number; sentAt: string }>>(
-      `conversations/${conversationId}/messages`,
+      `chatbot/conversations/${conversationId}/messages`,
       formData,
       { headers: { 'Content-Type': 'multipart/form-data' } }
     )
