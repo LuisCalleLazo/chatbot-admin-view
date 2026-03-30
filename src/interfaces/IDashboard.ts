@@ -1,3 +1,5 @@
+// interfaces/IDashboard.ts
+
 export interface DashboardStats {
   conversations: number
   customers: number
@@ -16,9 +18,9 @@ export interface DashboardRecentConversation {
 
 export interface DashboardTopProduct {
   name: string
-  valuePercent: number
   amountBs: number
-  color?: string
+  valuePercent: number
+  color: string
 }
 
 export interface DashboardSummary {
@@ -27,4 +29,3 @@ export interface DashboardSummary {
   topProducts: DashboardTopProduct[]
   conversationsPerDay: Array<{ day: string; value: number }>
 }
-
